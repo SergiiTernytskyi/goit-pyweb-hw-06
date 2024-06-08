@@ -4,6 +4,6 @@
     JOIN students s ON s.id = m.student_id
     JOIN groups g ON s.group_id = g.id
     JOIN subjects as sub ON m.subject_id = sub.id
-    WHERE sub.id = %s 
+    WHERE sub.id = 2 
     GROUP BY g.name
     ORDER BY g.name;
