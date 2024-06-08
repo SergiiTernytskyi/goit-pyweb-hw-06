@@ -5,29 +5,24 @@ from psycopg2 import DatabaseError
 
 from connect import create_connection
 
-if __name__ == "__main__":
-    query_01 = """
-    SELECT s.id,
-        s.first_name,
-        s.last_name,
-        AVG(m.mark) as average_mark
-    FROM students as s
-    JOIN marks as m ON s.id = m.student_id  
-    GROUP BY s.id
-    ORDER BY average_mark ASC
-    LIMIT 5;
-    """
 
+if __name__ == "__main__":
     try:
         with create_connection() as connection:
             if connection is not None:
                 c = connection.cursor()
 
                 sql_files = [file for file in os.listdir() if file.endswith(".sql")]
+
                 try:
-                    c.execute(query_01)
-                    result = c.fetchall()
-                    print(result)
+                    for file_path in sql_files:
+                        with open(file_path, "r", encoding="utf-8") as file:
+                            sql_query = file.read()
+
+                        print("===" * 50)
+                        c.execute(sql_query)
+                        result = c.fetchall()
+                        print(result)
                 except DatabaseError as error:
                     logging.error(error)
                 finally:
